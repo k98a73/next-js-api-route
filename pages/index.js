@@ -1,3 +1,4 @@
+// Next.jsのAPI Routesでどんなことができるのかを理解する(https://reffect.co.jp/react/next-js-api-route)
 import { useEffect } from "react";
 
 export default function Home() {
