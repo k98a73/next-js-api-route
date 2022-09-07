@@ -1,18 +1,22 @@
-export async function getServerSideProps() {
-  const response = await fetch("http://localhost:3000/api/users");
-  const data = await response.json();
+import { useEffect } from "react";
 
-  return { props: { data } };
-}
+export default function Home() {
+  useEffect(() => {
+    const postData = async () => {
+      await fetch("/api/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name: "John" }),
+      });
+    };
+    postData();
+  }, []);
 
-export default function Home({ data }) {
   return (
     <div>
-      <ul>
-        {data.users.map((user) => (
-          <li key={user.id}>{user.name}</li>
-        ))}
-      </ul>
+      <h1>ユーザー</h1>
     </div>
   );
 }
