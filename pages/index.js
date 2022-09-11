@@ -1,23 +1,17 @@
-// Next.jsのAPI Routesでどんなことができるのかを理解する(https://reffect.co.jp/react/next-js-api-route)
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 
 export default function Home() {
+  const [weather, setWeather] = useState("");
   useEffect(() => {
-    const postData = async () => {
-      await fetch("/api/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name: "John" }),
-      });
+    const fetchWeather = async () => {
+      const response = await fetch("/api/weather");
+      const data = await response.json();
+      setWeather(data);
     };
-    postData();
+    fetchWeather();
   }, []);
 
   return (
-    <div>
-      <h1>ユーザー</h1>
-    </div>
+    <div>{weather.weather && <p>東京の天気：{weather.weather[0].main}</p>}</div>
   );
 }
