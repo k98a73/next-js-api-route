@@ -1,12 +1,30 @@
+import sqlite3 from "sqlite3";
+
+const selectAll = (db, query) => {
+  return new Promise((resolve, reject) => {
+    db.all(query, (err, rows) => {
+      if (err) return reject(err);
+      return resolve(rows);
+    });
+  });
+};
+
 export async function getServerSideProps() {
-  const response = await fetch(
-    `https://api.openweathermap.org/data/2.5/weather?q=Tokyo&appid=${process.env.OPEN_WEATHER_API_KEY}&lang=ja`
-  );
-  const data = await response.json();
+  const db = new sqlite3.Database("./database.sqlite");
+  const data = await selectAll(db, "select * from users");
+  db.close();
 
   return { props: { data } };
 }
 
 export default function Home({ data }) {
-  return <div>{data.weather && <p>東京の天気：{data.weather[0].main}</p>}</div>;
+  return (
+    <div>
+      <ul>
+        {data.map((user) => (
+          <li key={user.id}>{user.name}</li>
+        ))}
+      </ul>
+    </div>
+  );
 }
